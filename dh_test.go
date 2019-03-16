@@ -37,6 +37,10 @@ func TestDHProcedure(t *testing.T) {
 		t.Error("Error creating encryption key", err)
 	}
 
+	if reflect.DeepEqual(ckHost.HostRandom, ckSlave.HostRandom) {
+		t.Error("HostRandom is equal and they should be different")
+	}
+
 	if !reflect.DeepEqual(ckHost.Key.NegotiatedKey, ckSlave.Key.NegotiatedKey) {
 		t.Error("NegotiatedKey is not equal")
 	}
