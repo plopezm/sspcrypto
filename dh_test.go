@@ -23,6 +23,10 @@ func TestDHProcedure(t *testing.T) {
 		t.Error("Error creating inter key", err)
 	}
 
+	if reflect.DeepEqual(ckHost.HostInterKey, ckSlave.HostInterKey) {
+		t.Error("HostInterKey are equal and they should be different")
+	}
+
 	// Setting slave keys using the host key of the opposite
 	ckHost.SlaveInterKey = ckSlave.HostInterKey
 	ckSlave.SlaveInterKey = ckHost.HostInterKey
