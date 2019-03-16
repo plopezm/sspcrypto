@@ -92,7 +92,7 @@ type ESSPKey struct {
 	EncryptionKey []byte
 }
 
-func (k *ESSPKey) MergeKeys() []byte {
+func (k ESSPKey) MergeKeys() []byte {
 	k.EncryptionKey = make([]byte, 16)
 	binary.BigEndian.PutUint64(k.EncryptionKey, uint64(k.FixedKey))
 	binary.BigEndian.PutUint64(k.EncryptionKey[8:], uint64(k.NegotiatedKey))
