@@ -95,14 +95,14 @@ func TestSSPCryptoKey_GetBinaryGenerator(t *testing.T) {
 		wantGenerator []byte
 	}{
 		{
-			name: "Converted to litte endian 53432123",
+			name: "Converted to little endian 53432123",
 			fields: fields{
 				Generator: 53432123,
 			},
 			wantGenerator: []byte{0x3B, 0x4F, 0x2F, 0x03, 0, 0, 0, 0},
 		},
 		{
-			name: "Converted to litte endian 31245436",
+			name: "Converted to little endian 31245436",
 			fields: fields{
 				Generator: 31245436,
 			},
@@ -141,14 +141,14 @@ func TestSSPCryptoKey_GetBinaryModulus(t *testing.T) {
 		wantModulus []byte
 	}{
 		{
-			name: "Converted to litte endian 53432123",
+			name: "Converted to little endian 53432123",
 			fields: fields{
 				Modulus: 53432123,
 			},
 			wantModulus: []byte{0x3B, 0x4F, 0x2F, 0x03, 0, 0, 0, 0},
 		},
 		{
-			name: "Converted to litte endian 31245436",
+			name: "Converted to little endian 31245436",
 			fields: fields{
 				Modulus: 31245436,
 			},
@@ -187,14 +187,14 @@ func TestSSPCryptoKey_GetBinaryHostInterKey(t *testing.T) {
 		wantHostInterKey []byte
 	}{
 		{
-			name: "Converted to litte endian 53432123",
+			name: "Converted to little endian 53432123",
 			fields: fields{
 				HostInterKey: 53432123,
 			},
 			wantHostInterKey: []byte{0x3B, 0x4F, 0x2F, 0x03, 0, 0, 0, 0},
 		},
 		{
-			name: "Converted to litte endian 31245436",
+			name: "Converted to little endian 31245436",
 			fields: fields{
 				HostInterKey: 31245436,
 			},
@@ -213,6 +213,62 @@ func TestSSPCryptoKey_GetBinaryHostInterKey(t *testing.T) {
 			}
 			if gotHostInterKey := c.GetBinaryHostInterKey(); !reflect.DeepEqual(gotHostInterKey, tt.wantHostInterKey) {
 				t.Errorf("SSPCryptoKey.GetBinaryHostInterKey() = %v, want %v", gotHostInterKey, tt.wantHostInterKey)
+			}
+		})
+	}
+}
+
+func TestSSPCryptoKey_SetSlaveInterKey(t *testing.T) {
+	type fields struct {
+		Generator     int64
+		Modulus       int64
+		HostRandom    int64
+		HostInterKey  int64
+		SlaveInterKey int64
+		Key           ESSPKey
+	}
+	type args struct {
+		slaveInterKey []byte
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   int64
+	}{
+		{
+			name: "Converted from little endian 53432123",
+			fields: fields{
+				HostInterKey: 0,
+			},
+			args: args{
+				slaveInterKey: []byte{0x3B, 0x4F, 0x2F, 0x03, 0, 0, 0, 0},
+			},
+			want: 53432123,
+		},
+		{
+			name: "Converted from little endian 31245436",
+			fields: fields{
+				HostInterKey: 0,
+			},
+			args: args{
+				slaveInterKey: []byte{0x7c, 0xc4, 0xdc, 0x01, 0, 0, 0, 0},
+			},
+			want: 31245436,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &SSPCryptoKey{
+				Generator:     tt.fields.Generator,
+				Modulus:       tt.fields.Modulus,
+				HostRandom:    tt.fields.HostRandom,
+				HostInterKey:  tt.fields.HostInterKey,
+				SlaveInterKey: tt.fields.SlaveInterKey,
+				Key:           tt.fields.Key,
+			}
+			if c.SetSlaveInterKey(tt.args.slaveInterKey); !reflect.DeepEqual(c.SlaveInterKey, tt.want) {
+				t.Errorf("SSPCryptoKey.SetSlaveInterKey() = %x, want %x", c.SlaveInterKey, tt.want)
 			}
 		})
 	}

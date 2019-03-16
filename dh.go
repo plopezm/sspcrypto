@@ -55,6 +55,13 @@ func (c *SSPCryptoKey) CreateNegotiatedKey() error {
 	return nil
 }
 
+func (c *SSPCryptoKey) SetSlaveInterKey(slaveInterKey []byte) {
+	c.SlaveInterKey = 0
+	for i:= 0;i < 8 ; i++ {
+		c.SlaveInterKey += int64(slaveInterKey[i]) << uint64(i*8);
+	}
+}
+
 func (c *SSPCryptoKey) GetBinaryGenerator() (generator []byte) {
 	generator = make([]byte, 8)
 	for i:= 0;i < 8 ; i++ {
