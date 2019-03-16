@@ -86,16 +86,15 @@ func (c *SSPCryptoKey) GetBinaryHostInterKey() (hostInterKey []byte) {
 	return hostInterKey
 }
 
-
 type ESSPKey struct {
 	FixedKey      int64
 	NegotiatedKey int64
-	MergedKey     []byte
+	EncryptionKey []byte
 }
 
-func (k *ESSPKey) FinishKey() []byte {
-	k.MergedKey = make([]byte, 16)
-	binary.BigEndian.PutUint64(k.MergedKey, uint64(k.FixedKey))
-	binary.BigEndian.PutUint64(k.MergedKey[8:], uint64(k.NegotiatedKey))
-	return k.MergedKey
+func (k *ESSPKey) MergeKeys() []byte {
+	k.EncryptionKey = make([]byte, 16)
+	binary.BigEndian.PutUint64(k.EncryptionKey, uint64(k.FixedKey))
+	binary.BigEndian.PutUint64(k.EncryptionKey[8:], uint64(k.NegotiatedKey))
+	return k.EncryptionKey
 }

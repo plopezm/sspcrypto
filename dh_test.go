@@ -41,8 +41,8 @@ func TestDHProcedure(t *testing.T) {
 		t.Error("NegotiatedKey is not equal")
 	}
 
-	if !reflect.DeepEqual(ckHost.Key.FinishKey(), ckSlave.Key.FinishKey()) {
-		t.Error("MergedKey is not equal")
+	if !reflect.DeepEqual(ckHost.Key.MergeKeys(), ckSlave.Key.MergeKeys()) {
+		t.Error("EncryptionKey is not equal")
 	}
 }
 
@@ -71,10 +71,10 @@ func TestFullKey_FinishKey(t *testing.T) {
 			k := &ESSPKey{
 				FixedKey:      tt.fields.FixedKey,
 				NegotiatedKey: tt.fields.EncryptKey,
-				MergedKey:     tt.fields.CompleteKey,
+				EncryptionKey: tt.fields.CompleteKey,
 			}
-			if got := k.FinishKey(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ESSPKey.FinishKey() = %v, want %v", got, tt.want)
+			if got := k.MergeKeys(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ESSPKey.MergeKeys() = %v, want %v", got, tt.want)
 			}
 		})
 	}
