@@ -9,16 +9,15 @@ func TestDHProcedure(t *testing.T) {
 	ckHost := new(SSPCryptoKey)
 	ckSlave := new(SSPCryptoKey)
 
-	// Sharing generator and modulus
-	ckHost.GenerateGeneratorAndModulus()
-	ckSlave.Generator = ckHost.Generator
-	ckSlave.Modulus = ckHost.Modulus
-
-	// Creating inter keys
-	err := ckHost.CreateHostInterKey()
+	// Generating host generator, modulus and hostInterKey
+	err := ckHost.Generate()
 	if err != nil {
 		t.Error("Error creating inter key", err)
 	}
+
+	// Generating slave generator, modulus and hostInterKey
+	ckSlave.Generator = ckHost.Generator
+	ckSlave.Modulus = ckHost.Modulus
 	err = ckSlave.CreateHostInterKey()
 	if err != nil {
 		t.Error("Error creating inter key", err)
@@ -38,15 +37,15 @@ func TestDHProcedure(t *testing.T) {
 	}
 
 	if reflect.DeepEqual(ckHost.HostRandom, ckSlave.HostRandom) {
-		t.Error("HostRandom is equal and they should be different")
+		t.Error("HostRandom are equal and they should be different")
 	}
 
 	if !reflect.DeepEqual(ckHost.Key.NegotiatedKey, ckSlave.Key.NegotiatedKey) {
-		t.Error("NegotiatedKey is not equal")
+		t.Error("NegotiatedKey are not equal")
 	}
 
 	if !reflect.DeepEqual(ckHost.Key.MergeKeys(), ckSlave.Key.MergeKeys()) {
-		t.Error("EncryptionKey is not equal")
+		t.Error("EncryptionKey are not equal")
 	}
 }
 
