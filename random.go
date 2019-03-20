@@ -1,4 +1,4 @@
-package cryptoutils
+package sspcrypto
 
 import "math/rand"
 
