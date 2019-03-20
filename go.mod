@@ -1,4 +1,4 @@
-module github.com/plopezm/cryptoutils
+module github.com/plopezm/sspcrypto
 
 go 1.12
 
